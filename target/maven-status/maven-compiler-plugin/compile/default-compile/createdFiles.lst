@@ -1,0 +1,6 @@
+nttdata/usertest/controller/UserRestcontroller.class
+nttdata/usertest/service/impl/UserServiceImpl.class
+nttdata/usertest/dto/TelefonoDTO.class
+nttdata/usertest/UsertestApplication.class
+nttdata/usertest/dto/UserRequestDTO.class
+nttdata/usertest/service/UserService.class
