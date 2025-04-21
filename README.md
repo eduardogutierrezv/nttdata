@@ -15,7 +15,9 @@
 5.- Dejo los cURL en caso de ser necesarios
 
 
-## API Reference
+## Pasos para probar el microservicio
+
+Nota: los endpoint que estan bajo el path de "/api/v1/" necesitan token tipo Bearer. 
 
 #### Guardar usuario
 
@@ -43,7 +45,9 @@
 | `contrasena`  | `string` | **Requerido**. Contraseña de inicio de sesion del usuario |
 | `telefonos`      | `array<telefono>` | **Opcional**. Arreglo de telefono de 1 o mas|
 
+Se crea un usuario nuevo.
 
+------------------------------------------------------------
 #### Login
 
 ```sh
@@ -60,7 +64,9 @@
 | `email`      | `string` | **Requerido**. Email del usuario|
 | `password`      | `string` | **Requerido**. Contraseña inicio de sesion |
 
+Inicio de sesion de usuario, si el usuario se encuentra en estado desactivado, no podra iniciar
 
+------------------------------------------------------------
 #### Informacion del usuario
 
 ```sh
@@ -72,6 +78,9 @@
 | :-------- | :------- | :-------------------------------- |
 | `email`      | `string` | **Requerido**. Email del usuario |
 
+Se obtiene los datos personales del usuario.
+
+------------------------------------------------------------
 #### Actualizacion del usuario
 
 ```sh
@@ -91,6 +100,9 @@
 | `email`      | `string` | **Opcional**. Email de usuario|
 | `contrasena`      | `string` | **Opcional**. Contraseña de incio de sesion del usuario |
 
+Se actualiza los datos del usuario, donde todos los campos son  opcionales del cuerpo.
+
+------------------------------------------------------------
 #### Desactivar usuario
 
 ```sh
@@ -103,7 +115,9 @@
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Requerido**. Uuid del usuario |
 
+Se desactiva el usuario y asi no podra iniciar sesion.
 
+------------------------------------------------------------
 #### Eliminar usuario
 
 ```sh
@@ -115,3 +129,5 @@
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Requerido**. Uuid del usuario|
+
+Se elimina el usuario.
