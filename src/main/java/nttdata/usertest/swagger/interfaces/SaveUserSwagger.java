@@ -15,7 +15,7 @@ import nttdata.usertest.swagger.SwaggerUtils;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Guardar un usuario", description = "Endpoint que permite guardar al usuario")
+@Operation(summary = "Guardar un usuario", description = "Endpoint que permite guardar al usuario, la contraseña debe que tener un minimo de 7 caracteres, numeros y letras")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuario creado exitosamente",
                 content = @Content(mediaType = "application/json", examples = @ExampleObject(

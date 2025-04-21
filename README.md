@@ -45,7 +45,7 @@ Nota: los endpoint que estan bajo el path de "/api/v1/" necesitan token tipo Bea
 | `contrasena`  | `string` | **Requerido**. Contraseña de inicio de sesion del usuario |
 | `telefonos`      | `array<telefono>` | **Opcional**. Arreglo de telefono de 1 o mas|
 
-Se crea un usuario nuevo.
+Se crea un usuario nuevo. La contraseña debe tener un mínimo de 7 caracteres compuesto de mayusculas y numeros
 
 ------------------------------------------------------------
 #### Login

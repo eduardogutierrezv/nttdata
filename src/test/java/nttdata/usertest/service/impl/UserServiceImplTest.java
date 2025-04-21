@@ -35,6 +35,10 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    UserEntity userGuardar = new UserEntity();
+
+    UserRequestDTO userReq = new UserRequestDTO();
+
     @BeforeEach
     public void setup() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
@@ -42,27 +46,9 @@ class UserServiceImplTest {
 
         java.lang.reflect.Field field = UserServiceImpl.class.getDeclaredField("passRestriccion");
         field.setAccessible(true);
-        field.set(userService, "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!^&+=])(?=\\S+$).{8,}$"); // ejemplo de regex
+        field.set(userService, "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{7,}$"); // ejemplo de regex
 
-    }
 
-    @Test
-    void saveUser() throws Exception {
-
-        TelefonoDTO telefonoReq = new TelefonoDTO();
-        ArrayList<TelefonoDTO> arrayTelefono = new ArrayList<>();
-        telefonoReq.setCodigoPais("56");
-        telefonoReq.setCodigoCiudad("9");
-        telefonoReq.setNumero("49138184");
-        arrayTelefono.add(telefonoReq);
-
-        UserRequestDTO userReq = new UserRequestDTO();
-        userReq.setNombre("Juan Rodriguez");
-        userReq.setCorreo("juan@rodriguez.cl");
-        userReq.setContrasena("Hunter21!");
-        userReq.setTelefonos(arrayTelefono);
-
-        UserEntity userGuardar = new UserEntity();
         userGuardar.setId(UUID.randomUUID());
         userGuardar.setCorreo("juan@rodriguez.cl");
         userGuardar.setNombre("Juan Rodriguez");
@@ -71,6 +57,23 @@ class UserServiceImplTest {
         userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
         userGuardar.setActivo(true);
         userGuardar.setTelefonos(new ArrayList<>());
+
+
+        TelefonoDTO telefonoReq = new TelefonoDTO();
+        ArrayList<TelefonoDTO> arrayTelefono = new ArrayList<>();
+        telefonoReq.setCodigoPais("56");
+        telefonoReq.setCodigoCiudad("9");
+        telefonoReq.setNumero("49138184");
+        arrayTelefono.add(telefonoReq);
+        userReq.setNombre("Juan Rodriguez");
+        userReq.setCorreo("juan@rodriguez.cl");
+        userReq.setContrasena("Hunter21!");
+        userReq.setTelefonos(arrayTelefono);
+    }
+
+    @Test
+    void saveUser() throws Exception {
+
 
         Mockito.when(userRepoMock.findByCorreo("juan@rodriguez.cl"))
                 .thenReturn(Optional.empty());
@@ -86,18 +89,8 @@ class UserServiceImplTest {
     @Test
     void saveUserBadEmail() throws Exception {
 
-        TelefonoDTO telefonoReq = new TelefonoDTO();
-        ArrayList<TelefonoDTO> arrayTelefono = new ArrayList<>();
-        telefonoReq.setCodigoPais("56");
-        telefonoReq.setCodigoCiudad("9");
-        telefonoReq.setNumero("49138184");
-        arrayTelefono.add(telefonoReq);
 
-        UserRequestDTO userReq = new UserRequestDTO();
-        userReq.setNombre("Juan Rodriguez");
         userReq.setCorreo("juan@rodriguez");
-        userReq.setContrasena("Hunter21!");
-        userReq.setTelefonos(arrayTelefono);
 
         ResponseEntity<?> response =  userService.saveUser(userReq);
 
@@ -109,18 +102,8 @@ class UserServiceImplTest {
     @Test
     void saveUserBadPassword() throws Exception {
 
-        TelefonoDTO telefonoReq = new TelefonoDTO();
-        ArrayList<TelefonoDTO> arrayTelefono = new ArrayList<>();
-        telefonoReq.setCodigoPais("56");
-        telefonoReq.setCodigoCiudad("9");
-        telefonoReq.setNumero("49138184");
-        arrayTelefono.add(telefonoReq);
 
-        UserRequestDTO userReq = new UserRequestDTO();
-        userReq.setNombre("Juan Rodriguez");
-        userReq.setCorreo("juan@rodriguez.cl");
-        userReq.setContrasena("Hunter21");
-        userReq.setTelefonos(arrayTelefono);
+        userReq.setContrasena("hunter");
 
         ResponseEntity<?> response =  userService.saveUser(userReq);
 
@@ -131,19 +114,6 @@ class UserServiceImplTest {
 
     @Test
     void EmailExist() throws Exception {
-
-        TelefonoDTO telefonoReq = new TelefonoDTO();
-        ArrayList<TelefonoDTO> arrayTelefono = new ArrayList<>();
-        telefonoReq.setCodigoPais("56");
-        telefonoReq.setCodigoCiudad("9");
-        telefonoReq.setNumero("49138184");
-        arrayTelefono.add(telefonoReq);
-
-        UserRequestDTO userReq = new UserRequestDTO();
-        userReq.setNombre("Juan Rodriguez");
-        userReq.setCorreo("juan@rodriguez.cl");
-        userReq.setContrasena("Hunter21!");
-        userReq.setTelefonos(arrayTelefono);
 
         Mockito.when(userRepoMock.findByCorreo("juan@rodriguez.cl"))
                 .thenReturn(Optional.of(new UserEntity()));
@@ -169,16 +139,6 @@ class UserServiceImplTest {
     @Test
     void getUserFound() {
 
-        UserEntity userGuardar = new UserEntity();
-        userGuardar.setId(UUID.randomUUID());
-        userGuardar.setCorreo("juan@rodriguez.cl");
-        userGuardar.setNombre("Juan Rodriguez");
-        userGuardar.setFechaCreacion(LocalDateTime.now());
-        userGuardar.setUltimoLogin(LocalDateTime.now());
-        userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
-        userGuardar.setActivo(true);
-        userGuardar.setTelefonos(new ArrayList<>());
-
       Mockito.when(userRepoMock.findByCorreo("juan@rodriguez.cl"))
                 .thenReturn(Optional.of(userGuardar));
 
@@ -194,9 +154,7 @@ class UserServiceImplTest {
         UserUpdateRequestDTO userUpdateRequestDTO = new UserUpdateRequestDTO();
         userUpdateRequestDTO.setNombre("Eduardo Gutierrez");
 
-
         ResponseEntity<?> response =  userService.updateUser(userUpdateRequestDTO, UUID.randomUUID());
-
 
         assertEquals(400, response.getStatusCodeValue());
         assertTrue(response.getBody().toString().contains("No se puede actualizar el usuario"));
@@ -211,15 +169,6 @@ class UserServiceImplTest {
         userUpdateRequestDTO.setNombre("Eduardo Gutierrez");
         userUpdateRequestDTO.setContrasena("Hunter23!");
         userUpdateRequestDTO.setCorreo("EduardoGutierrez@gmail.com");
-
-        UserEntity userGuardar = new UserEntity();
-        userGuardar.setCorreo("juan@rodriguez.cl");
-        userGuardar.setNombre("Juan Rodriguez");
-        userGuardar.setFechaCreacion(LocalDateTime.now());
-        userGuardar.setUltimoLogin(LocalDateTime.now());
-        userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
-        userGuardar.setActivo(true);
-        userGuardar.setTelefonos(new ArrayList<>());
 
         Mockito.when(userRepoMock.findById(uuid))
                 .thenReturn(Optional.of(userGuardar));
@@ -248,15 +197,6 @@ class UserServiceImplTest {
 
         UUID uuid = UUID.randomUUID();
 
-        UserEntity userGuardar = new UserEntity();
-        userGuardar.setCorreo("juan@rodriguez.cl");
-        userGuardar.setNombre("Juan Rodriguez");
-        userGuardar.setFechaCreacion(LocalDateTime.now());
-        userGuardar.setUltimoLogin(LocalDateTime.now());
-        userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
-        userGuardar.setActivo(true);
-        userGuardar.setTelefonos(new ArrayList<>());
-
         Mockito.when(userRepoMock.findById(uuid))
                 .thenReturn(Optional.of(userGuardar));
 
@@ -282,14 +222,7 @@ class UserServiceImplTest {
     @Test
     void loginUserActiveFalse() throws Exception {
 
-        UserEntity userGuardar = new UserEntity();
-        userGuardar.setCorreo("juan@rodriguez.cl");
-        userGuardar.setNombre("Juan Rodriguez");
-        userGuardar.setFechaCreacion(LocalDateTime.now());
-        userGuardar.setUltimoLogin(LocalDateTime.now());
-        userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
         userGuardar.setActivo(false);
-        userGuardar.setTelefonos(new ArrayList<>());
 
         Mockito.when(userRepoMock.findByCorreoAndPassword("juan@rodriguez.cl", "hunter2"))
                 .thenReturn(Optional.of(userGuardar));
@@ -303,15 +236,6 @@ class UserServiceImplTest {
 
     @Test
     void loginUserOk() throws Exception {
-
-        UserEntity userGuardar = new UserEntity();
-        userGuardar.setCorreo("juan@rodriguez.cl");
-        userGuardar.setNombre("Juan Rodriguez");
-        userGuardar.setFechaCreacion(LocalDateTime.now());
-        userGuardar.setUltimoLogin(LocalDateTime.now());
-        userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
-        userGuardar.setActivo(true);
-        userGuardar.setTelefonos(new ArrayList<>());
 
         Mockito.when(userRepoMock.findByCorreoAndPassword("juan@rodriguez.cl", "hunter2"))
                 .thenReturn(Optional.of(userGuardar));
@@ -338,14 +262,6 @@ class UserServiceImplTest {
     void userDesactivate() {
 
         UUID uuid = UUID.randomUUID();
-        UserEntity userGuardar = new UserEntity();
-        userGuardar.setCorreo("juan@rodriguez.cl");
-        userGuardar.setNombre("Juan Rodriguez");
-        userGuardar.setFechaCreacion(LocalDateTime.now());
-        userGuardar.setUltimoLogin(LocalDateTime.now());
-        userGuardar.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdWFuQHJvZHJpZ3Vlei5jbCIsImlhdCI6MTc0NTEyMjc0MH0.78pLMSn7XaBM9tAqt5gI9fXsDa-329y9AM3x5PlmKqk7kp8h3hb0TEUWhknwifGRsmFdHTYMvePFUwqUhD-V9Q");
-        userGuardar.setActivo(true);
-        userGuardar.setTelefonos(new ArrayList<>());
 
         Mockito.when(userRepoMock.findById(uuid))
                 .thenReturn(Optional.of(userGuardar));
